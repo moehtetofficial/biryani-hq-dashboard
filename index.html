@@ -3,1176 +3,1392 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biryani House Myanmar — Operations Desk</title>
+<title>Biryani House — Operations</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   :root {
-    --ink: #1a1410;
-    --paper: #f5f1e8;
-    --paper-2: #ede7d8;
-    --paper-edge: #d9d1bd;
-    --saffron: #c9582c;
-    --saffron-deep: #8b3a1a;
-    --cardamom: #4a5c3a;
-    --turmeric: #d4a93a;
-    --rose: #a64158;
-    --line: rgba(26, 20, 16, 0.12);
-    --line-strong: rgba(26, 20, 16, 0.28);
-    --mute: rgba(26, 20, 16, 0.58);
+    /* SURFACE — depth via subtle elevation */
+    --bg-0: #0a0e13;
+    --bg-1: #0f1419;
+    --bg-2: #161b22;
+    --bg-3: #1c232c;
+    --bg-hover: #232b36;
+
+    /* TEXT — warm whites reduce strain */
+    --text-1: #f8f6f1;
+    --text-2: #c4cdd6;
+    --text-3: #8b95a1;
+    --text-4: #5a6470;
+
+    /* BORDERS — minimal, only where needed */
+    --line-1: rgba(248, 246, 241, 0.06);
+    --line-2: rgba(248, 246, 241, 0.10);
+
+    /* BRAND — single accent, used with restraint */
+    --gold: #f4b860;
+    --gold-dim: rgba(244, 184, 96, 0.12);
+    --gold-line: rgba(244, 184, 96, 0.25);
+
+    /* STATUS — semantic only, never decorative */
+    --ok: #4ade80;
+    --ok-dim: rgba(74, 222, 128, 0.08);
+    --warn: #fbbf24;
+    --warn-dim: rgba(251, 191, 36, 0.10);
+    --warn-line: rgba(251, 191, 36, 0.30);
+    --crit: #ef4444;
+    --crit-dim: rgba(239, 68, 68, 0.10);
+    --crit-line: rgba(239, 68, 68, 0.35);
+
+    /* DELTA — subtle, not loud */
+    --up: #4ade80;
+    --down: #f87171;
+
+    --radius: 10px;
+    --radius-sm: 6px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Inter', system-ui, sans-serif;
+  html, body {
+    background: var(--bg-0);
+    color: var(--text-1);
+    font-family: 'Geist', 'Inter', system-ui, sans-serif;
     font-size: 14px;
     line-height: 1.5;
-    background-image:
-      radial-gradient(ellipse at top left, rgba(201, 88, 44, 0.04), transparent 50%),
-      radial-gradient(ellipse at bottom right, rgba(74, 92, 58, 0.04), transparent 50%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11', 'ss01';
     min-height: 100vh;
   }
 
-  .mm { font-family: 'Padauk', 'Inter', sans-serif; }
-  .display { font-family: 'Fraunces', Georgia, serif; font-variation-settings: "opsz" 144; }
-  .mono { font-family: 'JetBrains Mono', monospace; }
+  .mm { font-family: 'Padauk', 'Geist', sans-serif; }
+  .mono { font-family: 'Geist Mono', monospace; font-variant-numeric: tabular-nums; }
 
-  /* ───── MASTHEAD ───── */
-  .masthead {
-    border-bottom: 1px solid var(--ink);
-    padding: 18px 40px 14px;
+  /* ───── APP SHELL ───── */
+  .app {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: end;
-    gap: 24px;
+    grid-template-columns: 220px 1fr;
+    min-height: 100vh;
   }
 
-  .masthead-left {
+  /* ───── SIDEBAR ───── */
+  .sidebar {
+    background: var(--bg-1);
+    border-right: 1px solid var(--line-1);
+    padding: 20px 14px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 24px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
   }
 
-  .issue {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--mute);
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 8px;
   }
 
-  .date-stamp {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 13px;
-    color: var(--ink);
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--gold) 0%, #d4943a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-0);
+    font-weight: 700;
+    font-size: 14px;
   }
 
-  .masthead-center {
-    text-align: center;
-  }
-
-  .brand-title {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 600;
-    font-size: 38px;
-    line-height: 1;
-    letter-spacing: -0.02em;
+  .brand-name {
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
   }
 
   .brand-sub {
-    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--saffron);
-    margin-top: 4px;
+    color: var(--text-4);
+    letter-spacing: 0.04em;
   }
 
-  .masthead-right {
+  .nav {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 6px;
+    gap: 1px;
   }
 
-  .status-strip {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-  }
-
-  .status-strip .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 5px;
-  }
-
-  .dot.live { background: var(--cardamom); animation: pulse 2s infinite; }
-  .dot.warn { background: var(--turmeric); }
-  .dot.down { background: var(--rose); }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .user-pill {
-    border: 1px solid var(--line-strong);
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .avatar {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--ink);
-    color: var(--paper);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Fraunces', serif;
-    font-size: 11px;
-    font-weight: 600;
-  }
-
-  /* ───── RULER (under masthead) ───── */
-  .ruler {
-    border-bottom: 1px solid var(--ink);
-    padding: 8px 40px;
-    display: flex;
-    justify-content: space-between;
-    font-family: 'JetBrains Mono', monospace;
+  .nav-label {
     font-size: 10px;
-    letter-spacing: 0.15em;
+    color: var(--text-4);
     text-transform: uppercase;
-    color: var(--mute);
-  }
-
-  .ruler-left { display: flex; gap: 28px; }
-  .ruler-left a { color: var(--mute); text-decoration: none; padding-bottom: 2px; }
-  .ruler-left a.active { color: var(--ink); border-bottom: 1.5px solid var(--saffron); }
-
-  /* ───── MAIN GRID ───── */
-  .desk {
-    padding: 32px 40px 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 28px;
-  }
-
-  /* ───── HERO LEDE ───── */
-  .lede {
-    grid-column: 1 / -1;
-    border-bottom: 1px solid var(--ink);
-    padding-bottom: 28px;
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 48px;
-    align-items: end;
-  }
-
-  .lede-headline {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 64px;
-    line-height: 0.95;
-    letter-spacing: -0.025em;
-  }
-
-  .lede-headline em {
-    font-style: italic;
-    color: var(--saffron-deep);
-  }
-
-  .lede-headline .accent {
-    font-family: 'JetBrains Mono', monospace;
-    font-style: normal;
-    font-size: 18px;
-    vertical-align: super;
-    color: var(--saffron);
-    margin-left: 4px;
-    letter-spacing: 0;
-  }
-
-  .lede-deck {
-    font-family: 'Fraunces', serif;
-    font-size: 16px;
-    line-height: 1.45;
-    color: var(--mute);
-    font-style: italic;
-    border-left: 2px solid var(--saffron);
-    padding-left: 18px;
-  }
-
-  /* ───── METRIC ROW ───── */
-  .metric {
-    border-top: 0;
-    padding: 4px 0;
-  }
-
-  .metric-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--mute);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .metric-label .num {
-    color: var(--saffron);
+    letter-spacing: 0.08em;
+    padding: 6px 8px 4px;
     font-weight: 500;
   }
 
-  .metric-value {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 44px;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
-  }
-
-  .metric-unit {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--mute);
-    text-transform: lowercase;
-    margin-left: 4px;
-  }
-
-  .metric-foot {
-    font-size: 12px;
-    color: var(--mute);
-    display: flex;
-    gap: 6px;
-    align-items: baseline;
-  }
-
-  .delta-up { color: var(--cardamom); font-weight: 600; }
-  .delta-down { color: var(--rose); font-weight: 600; }
-
-  .spark {
-    height: 28px;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  /* ───── SECTION HEADERS ───── */
-  .section-head {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    padding-top: 12px;
-    border-top: 1px solid var(--line-strong);
-    padding-top: 24px;
-  }
-
-  .section-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--saffron);
-    letter-spacing: 0.1em;
-  }
-
-  .section-title {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 28px;
-    letter-spacing: -0.01em;
-  }
-
-  .section-deck {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    color: var(--mute);
-    font-size: 14px;
-    margin-left: auto;
-  }
-
-  /* ───── BRANCH CARDS ───── */
-  .branch {
-    grid-column: span 2;
-    border: 1px solid var(--ink);
-    padding: 20px 22px;
-    background: var(--paper);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: transform 0.15s;
-  }
-
-  .branch:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-
-  .branch.alert {
-    border-color: var(--turmeric);
-    background: linear-gradient(180deg, var(--paper) 0%, rgba(212, 169, 58, 0.06) 100%);
-  }
-
-  .branch.down {
-    border-color: var(--rose);
-    background: linear-gradient(180deg, var(--paper) 0%, rgba(166, 65, 88, 0.06) 100%);
-  }
-
-  .branch-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .branch-name {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 22px;
-    line-height: 1.1;
-  }
-
-  .branch-code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--mute);
-    letter-spacing: 0.1em;
-  }
-
-  .branch-status {
+  .nav-item {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .branch-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 14px;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding: 14px 0;
-  }
-
-  .branch-stat-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: var(--mute);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .branch-stat-value {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: -0.01em;
-  }
-
-  .branch-foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-  }
-
-  .branch-foot .target {
-    color: var(--mute);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-  }
-
-  .branch-action {
-    background: var(--ink);
-    color: var(--paper);
-    border: none;
-    padding: 6px 14px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-
-  .branch-action.warn { background: var(--saffron); }
-  .branch-action.urgent { background: var(--rose); }
-
-  /* ───── LEAGUE TABLE ───── */
-  .league {
-    grid-column: span 2;
-    border: 1px solid var(--ink);
-    padding: 22px;
-    background: var(--ink);
-    color: var(--paper);
-  }
-
-  .league h3 {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 20px;
-    margin-bottom: 4px;
-  }
-
-  .league-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--turmeric);
-    margin-bottom: 18px;
-  }
-
-  .league-row {
-    display: grid;
-    grid-template-columns: 24px 1fr auto auto;
-    gap: 14px;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(245, 241, 232, 0.1);
-    font-size: 13px;
-  }
-
-  .league-row:last-child { border-bottom: none; }
-
-  .league-rank {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 18px;
-    color: var(--turmeric);
-  }
-
-  .league-bar {
-    width: 80px;
-    height: 4px;
-    background: rgba(245, 241, 232, 0.1);
-    position: relative;
-  }
-
-  .league-bar-fill {
-    height: 100%;
-    background: var(--turmeric);
-  }
-
-  .league-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-  }
-
-  /* ───── ALERTS COLUMN ───── */
-  .alerts {
-    grid-column: span 2;
-    border: 1px solid var(--ink);
-    padding: 22px;
-  }
-
-  .alerts h3 {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 20px;
-    margin-bottom: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .alerts h3 .count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--saffron);
-  }
-
-  .alerts-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--mute);
-    margin-bottom: 18px;
-  }
-
-  .alert-item {
-    display: grid;
-    grid-template-columns: 60px 1fr auto;
-    gap: 14px;
-    padding: 14px 0;
-    border-top: 1px solid var(--line);
-    align-items: start;
-  }
-
-  .alert-time {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--mute);
-    letter-spacing: 0.05em;
-  }
-
-  .alert-time .severity {
-    display: block;
-    margin-top: 2px;
-    font-weight: 600;
-  }
-
-  .severity.high { color: var(--rose); }
-  .severity.mid { color: var(--turmeric); }
-  .severity.low { color: var(--cardamom); }
-  .severity.info { color: var(--mute); }
-
-  .alert-body strong {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 15px;
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .alert-body p {
-    font-size: 12px;
-    color: var(--mute);
-  }
-
-  .alert-cta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--ink);
-    border-bottom: 1px solid var(--ink);
-    cursor: pointer;
-    background: none;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    padding: 0 0 2px;
-  }
-
-  /* ───── COMMAND DECK ───── */
-  .command {
-    grid-column: 1 / -1;
-    border: 1px solid var(--ink);
-    padding: 0;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-  }
-
-  .command-left {
-    padding: 32px;
-    background: var(--saffron);
-    color: var(--paper);
-  }
-
-  .command-left .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    opacity: 0.85;
-  }
-
-  .command-left h2 {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 36px;
-    line-height: 1;
-    margin-bottom: 14px;
-  }
-
-  .command-left p {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 15px;
-    line-height: 1.45;
-    opacity: 0.9;
-    margin-bottom: 24px;
-  }
-
-  .command-left .history {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding-top: 18px;
-    border-top: 1px solid rgba(245, 241, 232, 0.3);
-    opacity: 0.85;
-  }
-
-  .command-right {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-  }
-
-  .cmd-tile {
-    padding: 26px 28px;
-    border-left: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
-    transition: background 0.15s;
-    display: flex;
-    flex-direction: column;
     gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--text-2);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    text-decoration: none;
   }
 
-  .cmd-tile:hover { background: var(--paper-2); }
-  .cmd-tile:nth-child(2n) { border-left: 1px solid var(--line); }
-  .cmd-tile:nth-child(n+3) { border-bottom: none; }
-
-  .cmd-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--saffron);
-    letter-spacing: 0.12em;
+  .nav-item:hover {
+    background: var(--bg-2);
+    color: var(--text-1);
   }
 
-  .cmd-title {
-    font-family: 'Fraunces', serif;
-    font-variation-settings: "opsz" 144, "wght" 500;
-    font-size: 22px;
-    line-height: 1.1;
+  .nav-item.active {
+    background: var(--bg-2);
+    color: var(--text-1);
   }
 
-  .cmd-desc {
-    font-size: 12px;
-    color: var(--mute);
-    line-height: 1.4;
-  }
-
-  .cmd-tile:hover .cmd-arrow { transform: translateX(4px); }
-  .cmd-arrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--ink);
-    margin-top: 6px;
-    transition: transform 0.15s;
-  }
-
-  /* ───── PULL QUOTE / FOOTER ───── */
-  .footer-quote {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 48px 80px 24px;
-    border-top: 1px solid var(--line-strong);
-  }
-
-  .footer-quote p {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-variation-settings: "opsz" 144, "wght" 400;
-    font-size: 22px;
-    line-height: 1.4;
-    color: var(--mute);
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .footer-quote .colophon {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--mute);
-    margin-top: 18px;
-  }
-
-  /* ───── DECORATIVE SEAL ───── */
-  .seal {
+  .nav-item.active::before {
+    content: '';
     position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--line-strong);
+    left: 0;
+    width: 2px;
+    height: 16px;
+    background: var(--gold);
+    margin-left: -14px;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-item .icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .nav-item .badge {
+    margin-left: auto;
+    font-size: 10px;
+    background: var(--crit);
+    color: var(--bg-0);
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .sidebar-foot {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
+    background: var(--bg-3);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
     font-size: 12px;
-    color: var(--mute);
+    font-weight: 600;
+    color: var(--gold);
   }
 
-  @media (max-width: 1100px) {
-    .desk { grid-template-columns: 1fr 1fr; }
-    .lede { grid-template-columns: 1fr; gap: 20px; }
-    .lede-headline { font-size: 44px; }
-    .branch, .league, .alerts { grid-column: 1 / -1; }
-    .command { grid-template-columns: 1fr; }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 12px; font-weight: 500; }
+  .user-role { font-size: 10px; color: var(--text-4); }
+
+  /* ───── MAIN ───── */
+  main {
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* ───── TOPBAR ───── */
+  .topbar {
+    height: 56px;
+    border-bottom: 1px solid var(--line-1);
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 16px;
+    background: var(--bg-0);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .topbar h1 {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .topbar .breadcrumb {
+    color: var(--text-4);
+    font-size: 13px;
+  }
+
+  .topbar-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search {
+    background: var(--bg-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 6px 12px 6px 32px;
+    color: var(--text-2);
+    font-family: inherit;
+    font-size: 13px;
+    width: 220px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b95a1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    transition: border 0.12s;
+  }
+
+  .search:focus {
+    outline: none;
+    border-color: var(--gold-line);
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line-1);
+    background: transparent;
+    color: var(--text-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.12s;
+    position: relative;
+  }
+
+  .icon-btn:hover { background: var(--bg-2); color: var(--text-1); }
+
+  .icon-btn .dot-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 6px;
+    height: 6px;
+    background: var(--crit);
+    border-radius: 50%;
+    border: 2px solid var(--bg-0);
+  }
+
+  /* ───── CONTENT ───── */
+  .content {
+    padding: 24px 28px 48px;
+    max-width: 1600px;
+  }
+
+  /* ───── ATTENTION BANNER (only shows when problems exist) ───── */
+  .attention-bar {
+    background: linear-gradient(90deg, var(--crit-dim) 0%, transparent 100%);
+    border: 1px solid var(--crit-line);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .attention-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--crit);
+    color: var(--bg-0);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .attention-text { flex: 1; }
+  .attention-title { font-size: 14px; font-weight: 500; }
+  .attention-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+  .attention-action {
+    background: var(--crit);
+    color: var(--bg-0);
+    border: none;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.12s;
+  }
+
+  .attention-action:hover { filter: brightness(1.1); }
+
+  /* ───── HEADER ROW ───── */
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+  }
+
+  .page-head h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .page-head .sub {
+    font-size: 13px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+
+  .seg {
+    display: flex;
+    background: var(--bg-2);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .seg button {
+    background: transparent;
+    border: none;
+    padding: 6px 14px;
+    color: var(--text-3);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .seg button.active {
+    background: var(--bg-3);
+    color: var(--text-1);
+    box-shadow: 0 1px 0 var(--line-2);
+  }
+
+  /* ───── KPI ROW ───── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .kpi {
+    background: var(--bg-1);
+    border: 1px solid var(--line-1);
+    border-radius: var(--radius);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi.primary {
+    background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+    border-color: var(--line-2);
+  }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+
+  .kpi-icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.6;
+  }
+
+  .kpi-value {
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text-1);
+  }
+
+  .kpi-value .unit {
+    font-size: 13px;
+    color: var(--text-4);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  .kpi-foot {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  .delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .delta.up { background: var(--ok-dim); color: var(--up); }
+  .delta.down { background: var(--crit-dim); color: var(--down); }
+  .delta.flat { background: var(--bg-2); color: var(--text-3); }
+
+  .kpi-spark {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ───── SECTION ───── */
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .section-head h3 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .section-head .meta {
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .link {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .link:hover { text-decoration: underline; }
+
+  /* ───── BRANCH GRID — sorted by attention need ───── */
+  .branch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .branch {
+    background: var(--bg-1);
+    border: 1px solid var(--line-1);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .branch:hover {
+    background: var(--bg-2);
+    transform: translateY(-1px);
+  }
+
+  /* PROBLEM branches — high contrast, full attention */
+  .branch.crit {
+    background: linear-gradient(135deg, var(--crit-dim) 0%, var(--bg-1) 60%);
+    border-color: var(--crit-line);
+  }
+
+  .branch.warn {
+    background: linear-gradient(135deg, var(--warn-dim) 0%, var(--bg-1) 60%);
+    border-color: var(--warn-line);
+  }
+
+  /* HEALTHY branches — quiet, low contrast (von Restorff effect) */
+  .branch.ok {
+    /* default styling — quiet */
+  }
+
+  .branch-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .branch-id {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .branch-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-1);
+  }
+
+  .branch.ok .branch-name { color: var(--text-2); }
+
+  .branch-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--text-4);
+    letter-spacing: 0.04em;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .status.ok { background: var(--ok-dim); color: var(--ok); }
+  .status.warn { background: var(--warn-dim); color: var(--warn); }
+  .status.crit { background: var(--crit-dim); color: var(--crit); }
+
+  .status .pulse {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .branch-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--line-1);
+    border-bottom: 1px solid var(--line-1);
+  }
+
+  .stat-key {
+    font-size: 10px;
+    color: var(--text-4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .stat-val {
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-1);
+    letter-spacing: -0.01em;
+  }
+
+  .branch.ok .stat-val { color: var(--text-2); font-weight: 500; }
+
+  .stat-sub {
+    font-size: 10px;
+    color: var(--text-4);
+    margin-top: 2px;
+  }
+
+  .branch-foot {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  .progress-target {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .progress-bar {
+    width: 50px;
+    height: 3px;
+    background: var(--bg-3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--ok);
+    border-radius: 2px;
+  }
+
+  .progress-fill.warn { background: var(--warn); }
+  .progress-fill.under { background: var(--text-4); }
+
+  .branch-cta {
+    background: transparent;
+    border: 1px solid var(--line-2);
+    color: var(--text-2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .branch.crit .branch-cta {
+    background: var(--crit);
+    color: var(--bg-0);
+    border-color: var(--crit);
+    font-weight: 600;
+  }
+
+  .branch.warn .branch-cta {
+    background: var(--warn);
+    color: var(--bg-0);
+    border-color: var(--warn);
+    font-weight: 600;
+  }
+
+  .branch-cta:hover { filter: brightness(1.1); }
+
+  /* ───── BOTTOM ROW — chart + activity ───── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+  }
+
+  .panel {
+    background: var(--bg-1);
+    border: 1px solid var(--line-1);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .panel-head h4 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .panel-head .meta {
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  /* ───── ACTIVITY FEED ───── */
+  .feed {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feed-item {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 10px;
+    padding: 10px 0;
+    align-items: flex-start;
+    border-top: 1px solid var(--line-1);
+  }
+
+  .feed-item:first-child { border-top: none; }
+
+  .feed-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+
+  .feed-dot.crit { background: var(--crit); }
+  .feed-dot.warn { background: var(--warn); }
+  .feed-dot.ok { background: var(--ok); }
+  .feed-dot.info { background: var(--text-4); }
+
+  .feed-body { min-width: 0; }
+  .feed-title {
+    font-size: 13px;
+    color: var(--text-1);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .feed-meta {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+  .feed-time {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--text-4);
+    white-space: nowrap;
+  }
+
+  /* ───── COMMAND STRIP ───── */
+  .command-strip {
+    margin-top: 28px;
+    padding: 18px;
+    background: var(--bg-1);
+    border: 1px solid var(--line-1);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .command-strip h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .command-strip p {
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .command-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .cmd-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--line-1);
+    color: var(--text-2);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cmd-btn:hover { background: var(--bg-3); color: var(--text-1); border-color: var(--line-2); }
+
+  .cmd-btn.primary {
+    background: var(--gold);
+    color: var(--bg-0);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  .cmd-btn.primary:hover { filter: brightness(1.08); }
+
+  /* ───── RESPONSIVE ───── */
+  @media (max-width: 1200px) {
+    .branch-grid { grid-template-columns: repeat(2, 1fr); }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .bottom-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .branch-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .content { padding: 16px; }
   }
 </style>
 </head>
 <body>
 
-<!-- MASTHEAD -->
-<header class="masthead">
-  <div class="masthead-left">
-    <div class="issue">Vol. III — No. 168</div>
-    <div class="date-stamp">Thursday, 18 June 2026</div>
-  </div>
-  <div class="masthead-center">
-    <div class="brand-title">Biryani <em style="font-style:italic">House</em></div>
-    <div class="brand-sub">Operations Desk · ပင်မ ထိန်းချုပ်ခန်း</div>
-  </div>
-  <div class="masthead-right">
-    <div class="status-strip">
-      <span><span class="dot live"></span>7 open</span>
-      <span><span class="dot warn"></span>1 watch</span>
-      <span><span class="dot down"></span>1 down</span>
-    </div>
-    <div class="user-pill">
-      <span class="avatar">M</span>
-      <span>Moe · Owner</span>
-    </div>
-  </div>
-</header>
+<div class="app">
 
-<!-- RULER -->
-<div class="ruler">
-  <div class="ruler-left">
-    <a href="#" class="active">Desk</a>
-    <a href="#">Branches</a>
-    <a href="#">Orders</a>
-    <a href="#">Catering</a>
-    <a href="#">Inventory</a>
-    <a href="#">Staff</a>
-    <a href="#">Ledger</a>
-  </div>
-  <div>Auto-refresh · 00:42</div>
+  <!-- ───── SIDEBAR ───── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div>
+        <div class="brand-name">Biryani House</div>
+        <div class="brand-sub mono">MYANMAR · 8 BRANCHES</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-label">Overview</div>
+      <a class="nav-item active" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Branches
+        <span class="badge">2</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg>
+        Orders
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Catering
+      </a>
+
+      <div class="nav-label" style="margin-top:12px">Operations</div>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Inventory
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="17" cy="7" r="4"/></svg>
+        Staff
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        Reports
+      </a>
+
+      <div class="nav-label" style="margin-top:12px">Control</div>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        Broadcast
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="avatar">M</div>
+      <div class="user-info">
+        <div class="user-name">Owner</div>
+        <div class="user-role">HQ Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ───── MAIN ───── -->
+  <main>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <h1>Dashboard</h1>
+      <span class="breadcrumb">/ Today · 18 Jun 2026</span>
+      <div class="topbar-actions">
+        <input class="search" placeholder="Search branches, orders, items…">
+        <button class="icon-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="dot-badge"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ATTENTION BANNER — shows only when problems exist -->
+      <div class="attention-bar">
+        <div class="attention-icon">!</div>
+        <div class="attention-text">
+          <div class="attention-title">၂ ဆိုင်ခွဲ အာရုံစိုက်ရန် လိုနေ</div>
+          <div class="attention-sub">Mawlamyine POS offline · Mandalay basmati 20kg ကျန်</div>
+        </div>
+        <button class="attention-action">View now</button>
+      </div>
+
+      <!-- PAGE HEAD -->
+      <div class="page-head">
+        <div>
+          <h2>Today at a glance</h2>
+          <div class="sub">ဆိုင်ခွဲ ၈ ခု · live · နောက်ဆုံး update လုပ်ပြီး ၁၂ စက္ကန့်က</div>
+        </div>
+        <div class="seg">
+          <button class="active">Today</button>
+          <button>7d</button>
+          <button>30d</button>
+          <button>QTD</button>
+        </div>
+      </div>
+
+      <!-- KPI ROW -->
+      <div class="kpi-row">
+        <div class="kpi primary">
+          <div class="kpi-label">
+            <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Revenue
+          </div>
+          <div class="kpi-value mono">8.47<span class="unit">M MMK</span></div>
+          <div class="kpi-foot">
+            <span class="delta up">↑ 12.4%</span>
+            <span class="mono" style="color:var(--text-4);font-size:11px">vs yesterday</span>
+          </div>
+          <canvas class="kpi-spark" id="spark1"></canvas>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">
+            <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Orders
+          </div>
+          <div class="kpi-value mono">1,247</div>
+          <div class="kpi-foot">
+            <span class="delta up">↑ 8.1%</span>
+            <span class="mono" style="color:var(--text-4);font-size:11px">peak 14:00</span>
+          </div>
+          <canvas class="kpi-spark" id="spark2"></canvas>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">
+            <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Avg ticket
+          </div>
+          <div class="kpi-value mono">6,800<span class="unit">MMK</span></div>
+          <div class="kpi-foot">
+            <span class="delta down">↓ 2.3%</span>
+            <span class="mono" style="color:var(--text-4);font-size:11px">combo shift</span>
+          </div>
+          <canvas class="kpi-spark" id="spark3"></canvas>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">
+            <svg class="kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+            Net margin
+          </div>
+          <div class="kpi-value mono">25.0<span class="unit">%</span></div>
+          <div class="kpi-foot">
+            <span class="delta up">↑ 1.4pt</span>
+            <span class="mono" style="color:var(--text-4);font-size:11px">cardamom ↓</span>
+          </div>
+          <canvas class="kpi-spark" id="spark4"></canvas>
+        </div>
+      </div>
+
+      <!-- BRANCHES — sorted by attention need -->
+      <div class="section">
+        <div class="section-head">
+          <div>
+            <h3>Branches</h3>
+            <div class="meta" style="margin-top:2px">Sorted by status · problems first</div>
+          </div>
+          <a class="link" href="#">All branches →</a>
+        </div>
+
+        <div class="branch-grid">
+
+          <!-- CRITICAL: Mawlamyine -->
+          <article class="branch crit">
+            <div class="branch-head">
+              <div class="branch-id">
+                <div class="branch-name">Mawlamyine</div>
+                <div class="branch-meta">BR-05 · MON</div>
+              </div>
+              <span class="status crit"><span class="pulse"></span>Offline</span>
+            </div>
+            <div class="branch-stats">
+              <div>
+                <div class="stat-key">Last ping</div>
+                <div class="stat-val">2h 14m</div>
+                <div class="stat-sub">since 14:28</div>
+              </div>
+              <div>
+                <div class="stat-key">Est. loss</div>
+                <div class="stat-val">340k</div>
+                <div class="stat-sub">at current rate</div>
+              </div>
+            </div>
+            <div class="branch-foot">
+              <span>POS unreachable · 2 calls unanswered</span>
+              <button class="branch-cta">Call manager</button>
+            </div>
+          </article>
+
+          <!-- WARN: Mandalay -->
+          <article class="branch warn">
+            <div class="branch-head">
+              <div class="branch-id">
+                <div class="branch-name">Aungmye</div>
+                <div class="branch-meta">BR-03 · MDY</div>
+              </div>
+              <span class="status warn"><span class="pulse"></span>Low stock</span>
+            </div>
+            <div class="branch-stats">
+              <div>
+                <div class="stat-key">Revenue</div>
+                <div class="stat-val">420k</div>
+                <div class="stat-sub">67 orders</div>
+              </div>
+              <div>
+                <div class="stat-key">Basmati left</div>
+                <div class="stat-val">20kg</div>
+                <div class="stat-sub">~3h until out</div>
+              </div>
+            </div>
+            <div class="branch-foot">
+              <span>Reorder draft ready · 80kg from Aung Lan</span>
+              <button class="branch-cta">Approve order</button>
+            </div>
+          </article>
+
+          <!-- OK: Bahan (high performer) -->
+          <article class="branch ok">
+            <div class="branch-head">
+              <div class="branch-id">
+                <div class="branch-name">Bahan</div>
+                <div class="branch-meta">BR-01 · YGN</div>
+              </div>
+              <span class="status ok"><span class="pulse"></span>Open</span>
+            </div>
+            <div class="branch-stats">
+              <div>
+                <div class="stat-key">Revenue</div>
+                <div class="stat-val">1.24M</div>
+                <div class="stat-sub">183 orders</div>
+              </div>
+              <div>
+                <div class="stat-key">vs target</div>
+                <div class="stat-val">115%</div>
+                <div class="stat-sub">on pace</div>
+              </div>
+            </div>
+            <div class="branch-foot">
+              <div class="progress-target">
+                <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                <span class="mono">115%</span>
+              </div>
+              <button class="branch-cta">Open</button>
+            </div>
+          </article>
+
+          <!-- OK: Hlaing -->
+          <article class="branch ok">
+            <div class="branch-head">
+              <div class="branch-id">
+                <div class="branch-name">Hlaing</div>
+                <div class="branch-meta">BR-02 · YGN</div>
+              </div>
+              <span class="status ok"><span class="pulse"></span>Open</span>
+            </div>
+            <div class="branch-stats">
+              <div>
+                <div class="stat-key">Revenue</div>
+                <div class="stat-val">980k</div>
+                <div class="stat-sub">142 orders</div>
+              </div>
+              <div>
+                <div class="stat-key">vs target</div>
+                <div class="stat-val">98%</div>
+                <div class="stat-sub">near plan</div>
+              </div>
+            </div>
+            <div class="branch-foot">
+              <div class="progress-target">
+                <div class="progress-bar"><div class="progress-fill" style="width:98%"></div></div>
+                <span class="mono">98%</span>
+              </div>
+              <button class="branch-cta">Open</button>
+            </div>
+          </article>
+
+          <!-- OK: Naypyidaw -->
+          <article class="branch ok">
+            <div class="branch-head">
+              <div class="branch-id">
+                <div class="branch-name">Zeya</div>
+                <div class="branch-meta">BR-04 · NPT</div>
+              </div>
+              <span class="status ok"><span class="pulse"></span>Open</span>
+            </div>
+            <div class="branch-stats">
+              <div>
+                <div class="stat-key">Revenue</div>
+                <div class="stat-val">780k</div>
+                <div class="stat-sub">118 orders</div>
+              </div>
+              <div>
+                <div class="stat-key">vs target</div>
+                <div class="stat-val">102%</div>
+                <div class="stat-sub">on pace</div>
+              </div>
+            </div>
+            <div class="branch-foot">
+              <div class="progress-target">
+                <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                <span class="mono">102%</span>
+              </div>
+              <button class="branch-cta">Open</button>
+            </div>
+          </article>
+
+          <!-- OK: Taunggyi (under) -->
+          <article class="branch ok">
+            <div class="branch-head">
+              <div class="branch-id">
+                <div class="branch-name">Taunggyi</div>
+                <div class="branch-meta">BR-06 · SHAN</div>
+              </div>
+              <span class="status ok"><span class="pulse"></span>Open</span>
+            </div>
+            <div class="branch-stats">
+              <div>
+                <div class="stat-key">Revenue</div>
+                <div class="stat-val">590k</div>
+                <div class="stat-sub">92 orders</div>
+              </div>
+              <div>
+                <div class="stat-key">vs target</div>
+                <div class="stat-val">87%</div>
+                <div class="stat-sub">behind</div>
+              </div>
+            </div>
+            <div class="branch-foot">
+              <div class="progress-target">
+                <div class="progress-bar"><div class="progress-fill under" style="width:87%"></div></div>
+                <span class="mono">87%</span>
+              </div>
+              <button class="branch-cta">Open</button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- BOTTOM ROW -->
+      <div class="bottom-row">
+
+        <!-- REVENUE COMPARISON -->
+        <div class="panel">
+          <div class="panel-head">
+            <h4>Revenue by branch · today</h4>
+            <span class="meta">in lakhs (MMK)</span>
+          </div>
+          <canvas id="mainChart" height="120"></canvas>
+        </div>
+
+        <!-- ACTIVITY FEED -->
+        <div class="panel">
+          <div class="panel-head">
+            <h4>Live activity</h4>
+            <span class="meta">Last hour</span>
+          </div>
+          <div class="feed">
+
+            <div class="feed-item">
+              <span class="feed-dot crit"></span>
+              <div class="feed-body">
+                <div class="feed-title">Mawlamyine POS offline</div>
+                <div class="feed-meta">No heartbeat · 2 calls unanswered</div>
+              </div>
+              <span class="feed-time">16:42</span>
+            </div>
+
+            <div class="feed-item">
+              <span class="feed-dot warn"></span>
+              <div class="feed-body">
+                <div class="feed-title">Mandalay basmati running low</div>
+                <div class="feed-meta">20kg left · reorder draft ready</div>
+              </div>
+              <span class="feed-time">16:08</span>
+            </div>
+
+            <div class="feed-item">
+              <span class="feed-dot info"></span>
+              <div class="feed-body">
+                <div class="feed-title">Catering booked · 1000 plates</div>
+                <div class="feed-meta">Hledan wedding · 20 Jun</div>
+              </div>
+              <span class="feed-time">15:31</span>
+            </div>
+
+            <div class="feed-item">
+              <span class="feed-dot ok"></span>
+              <div class="feed-body">
+                <div class="feed-title">Bahan crossed today's target</div>
+                <div class="feed-meta">115% with 3h trading left</div>
+              </div>
+              <span class="feed-time">14:55</span>
+            </div>
+
+            <div class="feed-item">
+              <span class="feed-dot info"></span>
+              <div class="feed-body">
+                <div class="feed-title">Menu price update synced</div>
+                <div class="feed-meta">8/8 branches acknowledged</div>
+              </div>
+              <span class="feed-time">11:14</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMAND STRIP -->
+      <div class="command-strip">
+        <div>
+          <h4>Broadcast to all branches</h4>
+          <p>Send a price update, menu change, or announcement to every kitchen at once.</p>
+        </div>
+        <div class="command-actions">
+          <button class="cmd-btn">📣 Announce</button>
+          <button class="cmd-btn">💵 Update price</button>
+          <button class="cmd-btn">🍽 Menu change</button>
+          <button class="cmd-btn primary">+ New broadcast</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
 </div>
-
-<main class="desk">
-
-  <!-- LEDE / HERO -->
-  <section class="lede">
-    <h1 class="lede-headline">
-      Eight kitchens,<br>
-      one <em>countertop</em><span class="accent">★</span>
-    </h1>
-    <p class="lede-deck">
-      ဆိုင်ခွဲတိုင်းရဲ့ ဒံပေါက်အိုးနဲ့ ငွေတွေ — ဒီစားပွဲတစ်ခုပေါ်မှာ စုံစေတယ်။ Owner ဖော်ပြရင် ဆိုင်ခွဲတိုင်း သိ၊ ဆိုင်ခွဲ တစ်ခုကို ဖော်ပြရင် မ်န်တာ မ်န်ပေါ်။
-    </p>
-  </section>
-
-  <!-- METRIC ROW -->
-  <div class="metric">
-    <div class="metric-label"><span class="num">01.</span> Today's takings</div>
-    <div class="metric-value">8.47<span class="metric-unit">M MMK</span></div>
-    <div class="metric-foot"><span class="delta-up">↑ 12.4%</span> over yesterday</div>
-    <canvas class="spark" id="spark1"></canvas>
-  </div>
-  <div class="metric">
-    <div class="metric-label"><span class="num">02.</span> Plates served</div>
-    <div class="metric-value">1,247<span class="metric-unit">orders</span></div>
-    <div class="metric-foot"><span class="delta-up">↑ 8.1%</span> · peak 14:00</div>
-    <canvas class="spark" id="spark2"></canvas>
-  </div>
-  <div class="metric">
-    <div class="metric-label"><span class="num">03.</span> Avg. ticket</div>
-    <div class="metric-value">6,800<span class="metric-unit">MMK</span></div>
-    <div class="metric-foot"><span class="delta-down">↓ 2.3%</span> · combo mix shift</div>
-    <canvas class="spark" id="spark3"></canvas>
-  </div>
-  <div class="metric">
-    <div class="metric-label"><span class="num">04.</span> Net margin</div>
-    <div class="metric-value">25.0<span class="metric-unit">%</span></div>
-    <div class="metric-foot"><span class="delta-up">↑ 1.4 pts</span> · cardamom price eased</div>
-    <canvas class="spark" id="spark4"></canvas>
-  </div>
-
-  <!-- BRANCH SECTION HEADER -->
-  <div class="section-head">
-    <span class="section-num">§ I.</span>
-    <h2 class="section-title">From the floor — branches reporting</h2>
-    <span class="section-deck">eight stoves, live this minute</span>
-  </div>
-
-  <!-- BRANCH CARD: BAHAN -->
-  <article class="branch">
-    <span class="seal">★</span>
-    <div class="branch-top">
-      <div>
-        <div class="branch-name">Bahan</div>
-        <div class="branch-code">BR-01 · Yangon</div>
-      </div>
-      <div class="branch-status"><span class="dot live"></span>Cooking</div>
-    </div>
-    <div class="branch-body">
-      <div>
-        <div class="branch-stat-label">Today</div>
-        <div class="branch-stat-value">1.24M</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Orders</div>
-        <div class="branch-stat-value">183</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">vs. target</div>
-        <div class="branch-stat-value">115%</div>
-      </div>
-    </div>
-    <div class="branch-foot">
-      <span class="target">Manager — U Kyaw Min · last ping 12s</span>
-      <button class="branch-action">Inspect</button>
-    </div>
-  </article>
-
-  <!-- BRANCH CARD: HLAING -->
-  <article class="branch">
-    <div class="branch-top">
-      <div>
-        <div class="branch-name">Hlaing</div>
-        <div class="branch-code">BR-02 · Yangon</div>
-      </div>
-      <div class="branch-status"><span class="dot live"></span>Cooking</div>
-    </div>
-    <div class="branch-body">
-      <div>
-        <div class="branch-stat-label">Today</div>
-        <div class="branch-stat-value">980k</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Orders</div>
-        <div class="branch-stat-value">142</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">vs. target</div>
-        <div class="branch-stat-value">98%</div>
-      </div>
-    </div>
-    <div class="branch-foot">
-      <span class="target">Manager — Daw Khin Khin · last ping 4s</span>
-      <button class="branch-action">Inspect</button>
-    </div>
-  </article>
-
-  <!-- BRANCH CARD: MANDALAY - ALERT -->
-  <article class="branch alert">
-    <div class="branch-top">
-      <div>
-        <div class="branch-name">Aungmye</div>
-        <div class="branch-code">BR-03 · Mandalay</div>
-      </div>
-      <div class="branch-status"><span class="dot warn"></span>Low stock</div>
-    </div>
-    <div class="branch-body">
-      <div>
-        <div class="branch-stat-label">Today</div>
-        <div class="branch-stat-value">420k</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Orders</div>
-        <div class="branch-stat-value">67</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Rice left</div>
-        <div class="branch-stat-value">20<span style="font-family:'JetBrains Mono';font-size:11px;color:var(--mute)">kg</span></div>
-      </div>
-    </div>
-    <div class="branch-foot">
-      <span class="target">Basmati at ~3 hours from sellout</span>
-      <button class="branch-action warn">Reorder</button>
-    </div>
-  </article>
-
-  <!-- BRANCH CARD: NAYPYIDAW -->
-  <article class="branch">
-    <div class="branch-top">
-      <div>
-        <div class="branch-name">Zeya</div>
-        <div class="branch-code">BR-04 · Naypyidaw</div>
-      </div>
-      <div class="branch-status"><span class="dot live"></span>Cooking</div>
-    </div>
-    <div class="branch-body">
-      <div>
-        <div class="branch-stat-label">Today</div>
-        <div class="branch-stat-value">780k</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Orders</div>
-        <div class="branch-stat-value">118</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">vs. target</div>
-        <div class="branch-stat-value">102%</div>
-      </div>
-    </div>
-    <div class="branch-foot">
-      <span class="target">Manager — U Thein · last ping 8s</span>
-      <button class="branch-action">Inspect</button>
-    </div>
-  </article>
-
-  <!-- BRANCH CARD: MAWLAMYINE - DOWN -->
-  <article class="branch down">
-    <div class="branch-top">
-      <div>
-        <div class="branch-name">Mawlamyine</div>
-        <div class="branch-code">BR-05 · Mon State</div>
-      </div>
-      <div class="branch-status"><span class="dot down"></span>POS down</div>
-    </div>
-    <div class="branch-body">
-      <div>
-        <div class="branch-stat-label">Last ping</div>
-        <div class="branch-stat-value">2h 14m</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Loss est.</div>
-        <div class="branch-stat-value">~340k</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Phone</div>
-        <div class="branch-stat-value">—</div>
-      </div>
-    </div>
-    <div class="branch-foot">
-      <span class="target">Manual entry available · falling back</span>
-      <button class="branch-action urgent">Call manager</button>
-    </div>
-  </article>
-
-  <!-- BRANCH CARD: TAUNGGYI -->
-  <article class="branch">
-    <div class="branch-top">
-      <div>
-        <div class="branch-name">Taunggyi</div>
-        <div class="branch-code">BR-06 · Shan</div>
-      </div>
-      <div class="branch-status"><span class="dot live"></span>Cooking</div>
-    </div>
-    <div class="branch-body">
-      <div>
-        <div class="branch-stat-label">Today</div>
-        <div class="branch-stat-value">590k</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">Orders</div>
-        <div class="branch-stat-value">92</div>
-      </div>
-      <div>
-        <div class="branch-stat-label">vs. target</div>
-        <div class="branch-stat-value">87%</div>
-      </div>
-    </div>
-    <div class="branch-foot">
-      <span class="target">Manager — Sai Hla · last ping 18s</span>
-      <button class="branch-action">Inspect</button>
-    </div>
-  </article>
-
-  <!-- SECTION II -->
-  <div class="section-head">
-    <span class="section-num">§ II.</span>
-    <h2 class="section-title">The standings &amp; the wires</h2>
-    <span class="section-deck">a quick read of who's leading and what's breaking</span>
-  </div>
-
-  <!-- LEAGUE TABLE -->
-  <section class="league">
-    <h3>Today's league</h3>
-    <div class="league-sub">Ranked by revenue · 18 Jun</div>
-    <div class="league-row">
-      <div class="league-rank">i.</div>
-      <div>Bahan</div>
-      <div class="league-bar"><div class="league-bar-fill" style="width: 100%"></div></div>
-      <div class="league-val">1.24M</div>
-    </div>
-    <div class="league-row">
-      <div class="league-rank">ii.</div>
-      <div>Hlaing</div>
-      <div class="league-bar"><div class="league-bar-fill" style="width: 79%"></div></div>
-      <div class="league-val">980k</div>
-    </div>
-    <div class="league-row">
-      <div class="league-rank">iii.</div>
-      <div>Zeya · NPT</div>
-      <div class="league-bar"><div class="league-bar-fill" style="width: 63%"></div></div>
-      <div class="league-val">780k</div>
-    </div>
-    <div class="league-row">
-      <div class="league-rank">iv.</div>
-      <div>Taunggyi</div>
-      <div class="league-bar"><div class="league-bar-fill" style="width: 48%"></div></div>
-      <div class="league-val">590k</div>
-    </div>
-    <div class="league-row">
-      <div class="league-rank">v.</div>
-      <div>Aungmye · MDY</div>
-      <div class="league-bar"><div class="league-bar-fill" style="width: 34%"></div></div>
-      <div class="league-val">420k</div>
-    </div>
-    <div class="league-row">
-      <div class="league-rank">vi.</div>
-      <div style="opacity:0.5">Mawlamyine · offline</div>
-      <div class="league-bar"></div>
-      <div class="league-val" style="opacity:0.5">—</div>
-    </div>
-  </section>
-
-  <!-- ALERTS COLUMN -->
-  <section class="alerts">
-    <h3>Wires <span class="count">4 active</span></h3>
-    <div class="alerts-sub">Filed in the last six hours</div>
-
-    <div class="alert-item">
-      <div class="alert-time">
-        16:42
-        <span class="severity high">High</span>
-      </div>
-      <div class="alert-body">
-        <strong>Mawlamyine POS unreachable</strong>
-        <p>No heartbeat since 14:28. Cashier reverted to manual receipt. Manager phone unanswered on two attempts.</p>
-      </div>
-      <button class="alert-cta">Escalate</button>
-    </div>
-
-    <div class="alert-item">
-      <div class="alert-time">
-        16:08
-        <span class="severity mid">Mid</span>
-      </div>
-      <div class="alert-body">
-        <strong>Mandalay — basmati running out</strong>
-        <p>20 kg remaining at present sell-rate. Auto-reorder draft ready for 80 kg from Aung Lan supplier.</p>
-      </div>
-      <button class="alert-cta">Approve</button>
-    </div>
-
-    <div class="alert-item">
-      <div class="alert-time">
-        15:31
-        <span class="severity info">Info</span>
-      </div>
-      <div class="alert-body">
-        <strong>Catering booked — Hledan wedding</strong>
-        <p>1,000 plates of mutton biryani · 20 Jun, 18:00 · Bahan kitchen assigned · chef confirmed.</p>
-      </div>
-      <button class="alert-cta">Open</button>
-    </div>
-
-    <div class="alert-item">
-      <div class="alert-time">
-        14:55
-        <span class="severity low">Good</span>
-      </div>
-      <div class="alert-body">
-        <strong>Bahan crossed today's target</strong>
-        <p>115% of plan with three hours of trading still ahead. On pace for a record Thursday.</p>
-      </div>
-      <button class="alert-cta">View</button>
-    </div>
-  </section>
-
-  <!-- SECTION III -->
-  <div class="section-head">
-    <span class="section-num">§ III.</span>
-    <h2 class="section-title">The command deck</h2>
-    <span class="section-deck">one message, eight kitchens</span>
-  </div>
-
-  <!-- COMMAND DECK -->
-  <section class="command">
-    <div class="command-left">
-      <div class="eyebrow">Broadcast · ဆိုင်ခွဲတိုင်းသို့</div>
-      <h2>Send one word.<br>Everyone hears it.</h2>
-      <p>Menu changes, price updates, urgent closures — pick a channel, choose your branches, send. Acknowledgement returns within seconds.</p>
-      <div class="history">Last broadcast — 11:14 · Menu update · 8/8 acknowledged</div>
-    </div>
-    <div class="command-right">
-      <div class="cmd-tile">
-        <div class="cmd-num">i.</div>
-        <div class="cmd-title">Announcement</div>
-        <div class="cmd-desc">Short message to every branch's Telegram group and tablet display.</div>
-        <div class="cmd-arrow">Open →</div>
-      </div>
-      <div class="cmd-tile">
-        <div class="cmd-num">ii.</div>
-        <div class="cmd-title">Price update</div>
-        <div class="cmd-desc">Push a new price for any menu item across selected branches.</div>
-        <div class="cmd-arrow">Open →</div>
-      </div>
-      <div class="cmd-tile">
-        <div class="cmd-num">iii.</div>
-        <div class="cmd-title">Menu change</div>
-        <div class="cmd-desc">Add, hide, or substitute dishes — syncs to POS and tablets immediately.</div>
-        <div class="cmd-arrow">Open →</div>
-      </div>
-      <div class="cmd-tile">
-        <div class="cmd-num">iv.</div>
-        <div class="cmd-title">Emergency</div>
-        <div class="cmd-desc">Close a branch, recall a dish, or summon a manager. Acknowledged in seconds.</div>
-        <div class="cmd-arrow">Open →</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER PULL QUOTE -->
-  <section class="footer-quote">
-    <p>"A franchise lives or dies in the gap between the founder's table and the line cook's pot. This is the table."</p>
-    <div class="colophon">Operations Desk · v2026.06 · Auto-published from n8n</div>
-  </section>
-
-</main>
 
 <script>
   // Sparkline helper
   function spark(id, data, color) {
     const ctx = document.getElementById(id);
     if (!ctx) return;
+    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 32);
+    gradient.addColorStop(0, color + '50');
+    gradient.addColorStop(1, color + '00');
+
     new Chart(ctx, {
       type: 'line',
       data: {
         labels: data.map((_, i) => i),
         datasets: [{
-          data,
-          borderColor: color,
-          borderWidth: 1.5,
-          tension: 0.4,
-          pointRadius: 0,
-          fill: true,
-          backgroundColor: color + '15'
+          data, borderColor: color, borderWidth: 1.5,
+          tension: 0.4, pointRadius: 0, fill: true,
+          backgroundColor: gradient
         }]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { enabled: false } },
         scales: { x: { display: false }, y: { display: false } },
-        elements: { line: { borderJoinStyle: 'round' } }
+        animation: { duration: 800 }
       }
     });
   }
 
-  spark('spark1', [3.2, 3.8, 4.1, 5.2, 6.1, 7.0, 7.8, 8.47], '#c9582c');
-  spark('spark2', [180, 240, 380, 520, 720, 920, 1100, 1247], '#4a5c3a');
-  spark('spark3', [7100, 7050, 6950, 6900, 6850, 6820, 6810, 6800], '#a64158');
-  spark('spark4', [22.1, 22.8, 23.4, 23.9, 24.3, 24.6, 24.8, 25.0], '#d4a93a');
+  spark('spark1', [3.2, 3.8, 4.1, 5.2, 6.1, 7.0, 7.8, 8.47], '#f4b860');
+  spark('spark2', [180, 240, 380, 520, 720, 920, 1100, 1247], '#4ade80');
+  spark('spark3', [7100, 7050, 6950, 6900, 6850, 6820, 6810, 6800], '#f87171');
+  spark('spark4', [22.1, 22.8, 23.4, 23.9, 24.3, 24.6, 24.8, 25.0], '#4ade80');
+
+  // Main bar chart
+  const mainCtx = document.getElementById('mainChart');
+  new Chart(mainCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Bahan', 'Hlaing', 'Zeya', 'Taunggyi', 'Aungmye', 'Mawlamyine'],
+      datasets: [{
+        label: 'Today',
+        data: [12.4, 9.8, 7.8, 5.9, 4.2, 0],
+        backgroundColor: ['#f4b860', '#f4b860', '#f4b860', '#5a6470', '#fbbf24', '#ef4444'],
+        borderRadius: 4,
+        barThickness: 24
+      }, {
+        label: 'Target',
+        data: [10.8, 10.0, 7.6, 6.8, 8.5, 6.5],
+        backgroundColor: '#1c232c',
+        borderRadius: 4,
+        barThickness: 24
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: {
+            color: '#8b95a1',
+            font: { size: 11, family: 'Geist' },
+            boxWidth: 10, boxHeight: 10,
+            padding: 12
+          }
+        },
+        tooltip: {
+          backgroundColor: '#161b22',
+          borderColor: '#1c232c',
+          borderWidth: 1,
+          titleColor: '#f8f6f1',
+          bodyColor: '#c4cdd6',
+          titleFont: { family: 'Geist', size: 12 },
+          bodyFont: { family: 'Geist Mono', size: 11 }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#5a6470', font: { family: 'Geist Mono', size: 10 } },
+          grid: { color: 'rgba(248, 246, 241, 0.04)' }
+        },
+        x: {
+          ticks: { color: '#8b95a1', font: { family: 'Geist', size: 11 } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
 </script>
 
 </body>
