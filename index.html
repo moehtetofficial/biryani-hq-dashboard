@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biryani House Myanmar — Operations Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f1e8;
+    --paper-2: #ede7d8;
+    --paper-edge: #d9d1bd;
+    --saffron: #c9582c;
+    --saffron-deep: #8b3a1a;
+    --cardamom: #4a5c3a;
+    --turmeric: #d4a93a;
+    --rose: #a64158;
+    --line: rgba(26, 20, 16, 0.12);
+    --line-strong: rgba(26, 20, 16, 0.28);
+    --mute: rgba(26, 20, 16, 0.58);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(201, 88, 44, 0.04), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(74, 92, 58, 0.04), transparent 50%);
+    min-height: 100vh;
+  }
+
+  .mm { font-family: 'Padauk', 'Inter', sans-serif; }
+  .display { font-family: 'Fraunces', Georgia, serif; font-variation-settings: "opsz" 144; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ───── MASTHEAD ───── */
+  .masthead {
+    border-bottom: 1px solid var(--ink);
+    padding: 18px 40px 14px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 24px;
+  }
+
+  .masthead-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .issue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .date-stamp {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .masthead-center {
+    text-align: center;
+  }
+
+  .brand-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 600;
+    font-size: 38px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-top: 4px;
+  }
+
+  .masthead-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .status-strip {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  .status-strip .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .dot.live { background: var(--cardamom); animation: pulse 2s infinite; }
+  .dot.warn { background: var(--turmeric); }
+  .dot.down { background: var(--rose); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .user-pill {
+    border: 1px solid var(--line-strong);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* ───── RULER (under masthead) ───── */
+  .ruler {
+    border-bottom: 1px solid var(--ink);
+    padding: 8px 40px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .ruler-left { display: flex; gap: 28px; }
+  .ruler-left a { color: var(--mute); text-decoration: none; padding-bottom: 2px; }
+  .ruler-left a.active { color: var(--ink); border-bottom: 1.5px solid var(--saffron); }
+
+  /* ───── MAIN GRID ───── */
+  .desk {
+    padding: 32px 40px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 28px;
+  }
+
+  /* ───── HERO LEDE ───── */
+  .lede {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 28px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+
+  .lede-headline {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 64px;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+  }
+
+  .lede-headline em {
+    font-style: italic;
+    color: var(--saffron-deep);
+  }
+
+  .lede-headline .accent {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 18px;
+    vertical-align: super;
+    color: var(--saffron);
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+
+  .lede-deck {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--mute);
+    font-style: italic;
+    border-left: 2px solid var(--saffron);
+    padding-left: 18px;
+  }
+
+  /* ───── METRIC ROW ───── */
+  .metric {
+    border-top: 0;
+    padding: 4px 0;
+  }
+
+  .metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .metric-label .num {
+    color: var(--saffron);
+    font-weight: 500;
+  }
+
+  .metric-value {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .metric-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--mute);
+    text-transform: lowercase;
+    margin-left: 4px;
+  }
+
+  .metric-foot {
+    font-size: 12px;
+    color: var(--mute);
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+
+  .delta-up { color: var(--cardamom); font-weight: 600; }
+  .delta-down { color: var(--rose); font-weight: 600; }
+
+  .spark {
+    height: 28px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* ───── SECTION HEADERS ───── */
+  .section-head {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 24px;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--saffron);
+    letter-spacing: 0.1em;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  .section-deck {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--mute);
+    font-size: 14px;
+    margin-left: auto;
+  }
+
+  /* ───── BRANCH CARDS ───── */
+  .branch {
+    grid-column: span 2;
+    border: 1px solid var(--ink);
+    padding: 20px 22px;
+    background: var(--paper);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.15s;
+  }
+
+  .branch:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .branch.alert {
+    border-color: var(--turmeric);
+    background: linear-gradient(180deg, var(--paper) 0%, rgba(212, 169, 58, 0.06) 100%);
+  }
+
+  .branch.down {
+    border-color: var(--rose);
+    background: linear-gradient(180deg, var(--paper) 0%, rgba(166, 65, 88, 0.06) 100%);
+  }
+
+  .branch-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .branch-name {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  .branch-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--mute);
+    letter-spacing: 0.1em;
+  }
+
+  .branch-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .branch-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+
+  .branch-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .branch-stat-value {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .branch-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .branch-foot .target {
+    color: var(--mute);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+
+  .branch-action {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .branch-action.warn { background: var(--saffron); }
+  .branch-action.urgent { background: var(--rose); }
+
+  /* ───── LEAGUE TABLE ───── */
+  .league {
+    grid-column: span 2;
+    border: 1px solid var(--ink);
+    padding: 22px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .league h3 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .league-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--turmeric);
+    margin-bottom: 18px;
+  }
+
+  .league-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+    font-size: 13px;
+  }
+
+  .league-row:last-child { border-bottom: none; }
+
+  .league-rank {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--turmeric);
+  }
+
+  .league-bar {
+    width: 80px;
+    height: 4px;
+    background: rgba(245, 241, 232, 0.1);
+    position: relative;
+  }
+
+  .league-bar-fill {
+    height: 100%;
+    background: var(--turmeric);
+  }
+
+  .league-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  /* ───── ALERTS COLUMN ───── */
+  .alerts {
+    grid-column: span 2;
+    border: 1px solid var(--ink);
+    padding: 22px;
+  }
+
+  .alerts h3 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .alerts h3 .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--saffron);
+  }
+
+  .alerts-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 18px;
+  }
+
+  .alert-item {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 14px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .alert-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--mute);
+    letter-spacing: 0.05em;
+  }
+
+  .alert-time .severity {
+    display: block;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+
+  .severity.high { color: var(--rose); }
+  .severity.mid { color: var(--turmeric); }
+  .severity.low { color: var(--cardamom); }
+  .severity.info { color: var(--mute); }
+
+  .alert-body strong {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 15px;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .alert-body p {
+    font-size: 12px;
+    color: var(--mute);
+  }
+
+  .alert-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding: 0 0 2px;
+  }
+
+  /* ───── COMMAND DECK ───── */
+  .command {
+    grid-column: 1 / -1;
+    border: 1px solid var(--ink);
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .command-left {
+    padding: 32px;
+    background: var(--saffron);
+    color: var(--paper);
+  }
+
+  .command-left .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.85;
+  }
+
+  .command-left h2 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+
+  .command-left p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.45;
+    opacity: 0.9;
+    margin-bottom: 24px;
+  }
+
+  .command-left .history {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 18px;
+    border-top: 1px solid rgba(245, 241, 232, 0.3);
+    opacity: 0.85;
+  }
+
+  .command-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .cmd-tile {
+    padding: 26px 28px;
+    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cmd-tile:hover { background: var(--paper-2); }
+  .cmd-tile:nth-child(2n) { border-left: 1px solid var(--line); }
+  .cmd-tile:nth-child(n+3) { border-bottom: none; }
+
+  .cmd-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--saffron);
+    letter-spacing: 0.12em;
+  }
+
+  .cmd-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "wght" 500;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  .cmd-desc {
+    font-size: 12px;
+    color: var(--mute);
+    line-height: 1.4;
+  }
+
+  .cmd-tile:hover .cmd-arrow { transform: translateX(4px); }
+  .cmd-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    margin-top: 6px;
+    transition: transform 0.15s;
+  }
+
+  /* ───── PULL QUOTE / FOOTER ───── */
+  .footer-quote {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 48px 80px 24px;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .footer-quote p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "wght" 400;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--mute);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .footer-quote .colophon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-top: 18px;
+  }
+
+  /* ───── DECORATIVE SEAL ───── */
+  .seal {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--mute);
+  }
+
+  @media (max-width: 1100px) {
+    .desk { grid-template-columns: 1fr 1fr; }
+    .lede { grid-template-columns: 1fr; gap: 20px; }
+    .lede-headline { font-size: 44px; }
+    .branch, .league, .alerts { grid-column: 1 / -1; }
+    .command { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-left">
+    <div class="issue">Vol. III — No. 168</div>
+    <div class="date-stamp">Thursday, 18 June 2026</div>
+  </div>
+  <div class="masthead-center">
+    <div class="brand-title">Biryani <em style="font-style:italic">House</em></div>
+    <div class="brand-sub">Operations Desk · ပင်မ ထိန်းချုပ်ခန်း</div>
+  </div>
+  <div class="masthead-right">
+    <div class="status-strip">
+      <span><span class="dot live"></span>7 open</span>
+      <span><span class="dot warn"></span>1 watch</span>
+      <span><span class="dot down"></span>1 down</span>
+    </div>
+    <div class="user-pill">
+      <span class="avatar">M</span>
+      <span>Moe · Owner</span>
+    </div>
+  </div>
+</header>
+
+<!-- RULER -->
+<div class="ruler">
+  <div class="ruler-left">
+    <a href="#" class="active">Desk</a>
+    <a href="#">Branches</a>
+    <a href="#">Orders</a>
+    <a href="#">Catering</a>
+    <a href="#">Inventory</a>
+    <a href="#">Staff</a>
+    <a href="#">Ledger</a>
+  </div>
+  <div>Auto-refresh · 00:42</div>
+</div>
+
+<main class="desk">
+
+  <!-- LEDE / HERO -->
+  <section class="lede">
+    <h1 class="lede-headline">
+      Eight kitchens,<br>
+      one <em>countertop</em><span class="accent">★</span>
+    </h1>
+    <p class="lede-deck">
+      ဆိုင်ခွဲတိုင်းရဲ့ ဒံပေါက်အိုးနဲ့ ငွေတွေ — ဒီစားပွဲတစ်ခုပေါ်မှာ စုံစေတယ်။ Owner ဖော်ပြရင် ဆိုင်ခွဲတိုင်း သိ၊ ဆိုင်ခွဲ တစ်ခုကို ဖော်ပြရင် မ်န်တာ မ်န်ပေါ်။
+    </p>
+  </section>
+
+  <!-- METRIC ROW -->
+  <div class="metric">
+    <div class="metric-label"><span class="num">01.</span> Today's takings</div>
+    <div class="metric-value">8.47<span class="metric-unit">M MMK</span></div>
+    <div class="metric-foot"><span class="delta-up">↑ 12.4%</span> over yesterday</div>
+    <canvas class="spark" id="spark1"></canvas>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="num">02.</span> Plates served</div>
+    <div class="metric-value">1,247<span class="metric-unit">orders</span></div>
+    <div class="metric-foot"><span class="delta-up">↑ 8.1%</span> · peak 14:00</div>
+    <canvas class="spark" id="spark2"></canvas>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="num">03.</span> Avg. ticket</div>
+    <div class="metric-value">6,800<span class="metric-unit">MMK</span></div>
+    <div class="metric-foot"><span class="delta-down">↓ 2.3%</span> · combo mix shift</div>
+    <canvas class="spark" id="spark3"></canvas>
+  </div>
+  <div class="metric">
+    <div class="metric-label"><span class="num">04.</span> Net margin</div>
+    <div class="metric-value">25.0<span class="metric-unit">%</span></div>
+    <div class="metric-foot"><span class="delta-up">↑ 1.4 pts</span> · cardamom price eased</div>
+    <canvas class="spark" id="spark4"></canvas>
+  </div>
+
+  <!-- BRANCH SECTION HEADER -->
+  <div class="section-head">
+    <span class="section-num">§ I.</span>
+    <h2 class="section-title">From the floor — branches reporting</h2>
+    <span class="section-deck">eight stoves, live this minute</span>
+  </div>
+
+  <!-- BRANCH CARD: BAHAN -->
+  <article class="branch">
+    <span class="seal">★</span>
+    <div class="branch-top">
+      <div>
+        <div class="branch-name">Bahan</div>
+        <div class="branch-code">BR-01 · Yangon</div>
+      </div>
+      <div class="branch-status"><span class="dot live"></span>Cooking</div>
+    </div>
+    <div class="branch-body">
+      <div>
+        <div class="branch-stat-label">Today</div>
+        <div class="branch-stat-value">1.24M</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Orders</div>
+        <div class="branch-stat-value">183</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">vs. target</div>
+        <div class="branch-stat-value">115%</div>
+      </div>
+    </div>
+    <div class="branch-foot">
+      <span class="target">Manager — U Kyaw Min · last ping 12s</span>
+      <button class="branch-action">Inspect</button>
+    </div>
+  </article>
+
+  <!-- BRANCH CARD: HLAING -->
+  <article class="branch">
+    <div class="branch-top">
+      <div>
+        <div class="branch-name">Hlaing</div>
+        <div class="branch-code">BR-02 · Yangon</div>
+      </div>
+      <div class="branch-status"><span class="dot live"></span>Cooking</div>
+    </div>
+    <div class="branch-body">
+      <div>
+        <div class="branch-stat-label">Today</div>
+        <div class="branch-stat-value">980k</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Orders</div>
+        <div class="branch-stat-value">142</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">vs. target</div>
+        <div class="branch-stat-value">98%</div>
+      </div>
+    </div>
+    <div class="branch-foot">
+      <span class="target">Manager — Daw Khin Khin · last ping 4s</span>
+      <button class="branch-action">Inspect</button>
+    </div>
+  </article>
+
+  <!-- BRANCH CARD: MANDALAY - ALERT -->
+  <article class="branch alert">
+    <div class="branch-top">
+      <div>
+        <div class="branch-name">Aungmye</div>
+        <div class="branch-code">BR-03 · Mandalay</div>
+      </div>
+      <div class="branch-status"><span class="dot warn"></span>Low stock</div>
+    </div>
+    <div class="branch-body">
+      <div>
+        <div class="branch-stat-label">Today</div>
+        <div class="branch-stat-value">420k</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Orders</div>
+        <div class="branch-stat-value">67</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Rice left</div>
+        <div class="branch-stat-value">20<span style="font-family:'JetBrains Mono';font-size:11px;color:var(--mute)">kg</span></div>
+      </div>
+    </div>
+    <div class="branch-foot">
+      <span class="target">Basmati at ~3 hours from sellout</span>
+      <button class="branch-action warn">Reorder</button>
+    </div>
+  </article>
+
+  <!-- BRANCH CARD: NAYPYIDAW -->
+  <article class="branch">
+    <div class="branch-top">
+      <div>
+        <div class="branch-name">Zeya</div>
+        <div class="branch-code">BR-04 · Naypyidaw</div>
+      </div>
+      <div class="branch-status"><span class="dot live"></span>Cooking</div>
+    </div>
+    <div class="branch-body">
+      <div>
+        <div class="branch-stat-label">Today</div>
+        <div class="branch-stat-value">780k</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Orders</div>
+        <div class="branch-stat-value">118</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">vs. target</div>
+        <div class="branch-stat-value">102%</div>
+      </div>
+    </div>
+    <div class="branch-foot">
+      <span class="target">Manager — U Thein · last ping 8s</span>
+      <button class="branch-action">Inspect</button>
+    </div>
+  </article>
+
+  <!-- BRANCH CARD: MAWLAMYINE - DOWN -->
+  <article class="branch down">
+    <div class="branch-top">
+      <div>
+        <div class="branch-name">Mawlamyine</div>
+        <div class="branch-code">BR-05 · Mon State</div>
+      </div>
+      <div class="branch-status"><span class="dot down"></span>POS down</div>
+    </div>
+    <div class="branch-body">
+      <div>
+        <div class="branch-stat-label">Last ping</div>
+        <div class="branch-stat-value">2h 14m</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Loss est.</div>
+        <div class="branch-stat-value">~340k</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Phone</div>
+        <div class="branch-stat-value">—</div>
+      </div>
+    </div>
+    <div class="branch-foot">
+      <span class="target">Manual entry available · falling back</span>
+      <button class="branch-action urgent">Call manager</button>
+    </div>
+  </article>
+
+  <!-- BRANCH CARD: TAUNGGYI -->
+  <article class="branch">
+    <div class="branch-top">
+      <div>
+        <div class="branch-name">Taunggyi</div>
+        <div class="branch-code">BR-06 · Shan</div>
+      </div>
+      <div class="branch-status"><span class="dot live"></span>Cooking</div>
+    </div>
+    <div class="branch-body">
+      <div>
+        <div class="branch-stat-label">Today</div>
+        <div class="branch-stat-value">590k</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">Orders</div>
+        <div class="branch-stat-value">92</div>
+      </div>
+      <div>
+        <div class="branch-stat-label">vs. target</div>
+        <div class="branch-stat-value">87%</div>
+      </div>
+    </div>
+    <div class="branch-foot">
+      <span class="target">Manager — Sai Hla · last ping 18s</span>
+      <button class="branch-action">Inspect</button>
+    </div>
+  </article>
+
+  <!-- SECTION II -->
+  <div class="section-head">
+    <span class="section-num">§ II.</span>
+    <h2 class="section-title">The standings &amp; the wires</h2>
+    <span class="section-deck">a quick read of who's leading and what's breaking</span>
+  </div>
+
+  <!-- LEAGUE TABLE -->
+  <section class="league">
+    <h3>Today's league</h3>
+    <div class="league-sub">Ranked by revenue · 18 Jun</div>
+    <div class="league-row">
+      <div class="league-rank">i.</div>
+      <div>Bahan</div>
+      <div class="league-bar"><div class="league-bar-fill" style="width: 100%"></div></div>
+      <div class="league-val">1.24M</div>
+    </div>
+    <div class="league-row">
+      <div class="league-rank">ii.</div>
+      <div>Hlaing</div>
+      <div class="league-bar"><div class="league-bar-fill" style="width: 79%"></div></div>
+      <div class="league-val">980k</div>
+    </div>
+    <div class="league-row">
+      <div class="league-rank">iii.</div>
+      <div>Zeya · NPT</div>
+      <div class="league-bar"><div class="league-bar-fill" style="width: 63%"></div></div>
+      <div class="league-val">780k</div>
+    </div>
+    <div class="league-row">
+      <div class="league-rank">iv.</div>
+      <div>Taunggyi</div>
+      <div class="league-bar"><div class="league-bar-fill" style="width: 48%"></div></div>
+      <div class="league-val">590k</div>
+    </div>
+    <div class="league-row">
+      <div class="league-rank">v.</div>
+      <div>Aungmye · MDY</div>
+      <div class="league-bar"><div class="league-bar-fill" style="width: 34%"></div></div>
+      <div class="league-val">420k</div>
+    </div>
+    <div class="league-row">
+      <div class="league-rank">vi.</div>
+      <div style="opacity:0.5">Mawlamyine · offline</div>
+      <div class="league-bar"></div>
+      <div class="league-val" style="opacity:0.5">—</div>
+    </div>
+  </section>
+
+  <!-- ALERTS COLUMN -->
+  <section class="alerts">
+    <h3>Wires <span class="count">4 active</span></h3>
+    <div class="alerts-sub">Filed in the last six hours</div>
+
+    <div class="alert-item">
+      <div class="alert-time">
+        16:42
+        <span class="severity high">High</span>
+      </div>
+      <div class="alert-body">
+        <strong>Mawlamyine POS unreachable</strong>
+        <p>No heartbeat since 14:28. Cashier reverted to manual receipt. Manager phone unanswered on two attempts.</p>
+      </div>
+      <button class="alert-cta">Escalate</button>
+    </div>
+
+    <div class="alert-item">
+      <div class="alert-time">
+        16:08
+        <span class="severity mid">Mid</span>
+      </div>
+      <div class="alert-body">
+        <strong>Mandalay — basmati running out</strong>
+        <p>20 kg remaining at present sell-rate. Auto-reorder draft ready for 80 kg from Aung Lan supplier.</p>
+      </div>
+      <button class="alert-cta">Approve</button>
+    </div>
+
+    <div class="alert-item">
+      <div class="alert-time">
+        15:31
+        <span class="severity info">Info</span>
+      </div>
+      <div class="alert-body">
+        <strong>Catering booked — Hledan wedding</strong>
+        <p>1,000 plates of mutton biryani · 20 Jun, 18:00 · Bahan kitchen assigned · chef confirmed.</p>
+      </div>
+      <button class="alert-cta">Open</button>
+    </div>
+
+    <div class="alert-item">
+      <div class="alert-time">
+        14:55
+        <span class="severity low">Good</span>
+      </div>
+      <div class="alert-body">
+        <strong>Bahan crossed today's target</strong>
+        <p>115% of plan with three hours of trading still ahead. On pace for a record Thursday.</p>
+      </div>
+      <button class="alert-cta">View</button>
+    </div>
+  </section>
+
+  <!-- SECTION III -->
+  <div class="section-head">
+    <span class="section-num">§ III.</span>
+    <h2 class="section-title">The command deck</h2>
+    <span class="section-deck">one message, eight kitchens</span>
+  </div>
+
+  <!-- COMMAND DECK -->
+  <section class="command">
+    <div class="command-left">
+      <div class="eyebrow">Broadcast · ဆိုင်ခွဲတိုင်းသို့</div>
+      <h2>Send one word.<br>Everyone hears it.</h2>
+      <p>Menu changes, price updates, urgent closures — pick a channel, choose your branches, send. Acknowledgement returns within seconds.</p>
+      <div class="history">Last broadcast — 11:14 · Menu update · 8/8 acknowledged</div>
+    </div>
+    <div class="command-right">
+      <div class="cmd-tile">
+        <div class="cmd-num">i.</div>
+        <div class="cmd-title">Announcement</div>
+        <div class="cmd-desc">Short message to every branch's Telegram group and tablet display.</div>
+        <div class="cmd-arrow">Open →</div>
+      </div>
+      <div class="cmd-tile">
+        <div class="cmd-num">ii.</div>
+        <div class="cmd-title">Price update</div>
+        <div class="cmd-desc">Push a new price for any menu item across selected branches.</div>
+        <div class="cmd-arrow">Open →</div>
+      </div>
+      <div class="cmd-tile">
+        <div class="cmd-num">iii.</div>
+        <div class="cmd-title">Menu change</div>
+        <div class="cmd-desc">Add, hide, or substitute dishes — syncs to POS and tablets immediately.</div>
+        <div class="cmd-arrow">Open →</div>
+      </div>
+      <div class="cmd-tile">
+        <div class="cmd-num">iv.</div>
+        <div class="cmd-title">Emergency</div>
+        <div class="cmd-desc">Close a branch, recall a dish, or summon a manager. Acknowledged in seconds.</div>
+        <div class="cmd-arrow">Open →</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER PULL QUOTE -->
+  <section class="footer-quote">
+    <p>"A franchise lives or dies in the gap between the founder's table and the line cook's pot. This is the table."</p>
+    <div class="colophon">Operations Desk · v2026.06 · Auto-published from n8n</div>
+  </section>
+
+</main>
+
+<script>
+  // Sparkline helper
+  function spark(id, data, color) {
+    const ctx = document.getElementById(id);
+    if (!ctx) return;
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.map((_, i) => i),
+        datasets: [{
+          data,
+          borderColor: color,
+          borderWidth: 1.5,
+          tension: 0.4,
+          pointRadius: 0,
+          fill: true,
+          backgroundColor: color + '15'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: { x: { display: false }, y: { display: false } },
+        elements: { line: { borderJoinStyle: 'round' } }
+      }
+    });
+  }
+
+  spark('spark1', [3.2, 3.8, 4.1, 5.2, 6.1, 7.0, 7.8, 8.47], '#c9582c');
+  spark('spark2', [180, 240, 380, 520, 720, 920, 1100, 1247], '#4a5c3a');
+  spark('spark3', [7100, 7050, 6950, 6900, 6850, 6820, 6810, 6800], '#a64158');
+  spark('spark4', [22.1, 22.8, 23.4, 23.9, 24.3, 24.6, 24.8, 25.0], '#d4a93a');
+</script>
+
+</body>
+</html>
