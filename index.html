@@ -790,6 +790,161 @@
     white-space: nowrap;
   }
 
+  /* ───── RANK LIST (leaderboard) ───── */
+  .rank-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rank-row {
+    display: grid;
+    grid-template-columns: 22px 1.2fr 2.2fr 85px;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 0;
+    border-top: 1px solid var(--line-1);
+  }
+
+  .rank-row:first-child { border-top: none; }
+
+  .rank-row.offline { opacity: 0.55; }
+
+  .rank-pos {
+    font-size: 12px;
+    color: var(--text-4);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .rank-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-1);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .rank-sub {
+    font-size: 10px;
+    color: var(--text-4);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .rank-bar {
+    position: relative;
+    height: 8px;
+    background: var(--bg-2);
+    border-radius: 4px;
+    overflow: visible;
+  }
+
+  .rank-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .rank-fill.ok { background: var(--ok); }
+  .rank-fill.near { background: var(--gold); }
+  .rank-fill.under { background: var(--text-4); }
+  .rank-fill.warn { background: var(--warn); }
+  .rank-fill.crit { background: var(--crit); }
+
+  .rank-target {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    background: var(--text-2);
+    border-radius: 1px;
+    z-index: 2;
+    box-shadow: 0 0 0 2px var(--bg-1);
+  }
+
+  .rank-val {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-1);
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .rank-vs {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .rank-vs.up { background: var(--ok-dim); color: var(--ok); }
+  .rank-vs.near { background: var(--bg-2); color: var(--text-3); }
+  .rank-vs.down { background: var(--crit-dim); color: var(--down); }
+  .rank-vs.crit { background: var(--crit-dim); color: var(--crit); }
+
+  .rank-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-1);
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  .legend-dot.ok { background: var(--ok); }
+  .legend-dot.near { background: var(--gold); }
+  .legend-dot.under { background: var(--text-4); }
+
+  .legend-line {
+    width: 2px;
+    height: 10px;
+    background: var(--text-2);
+    border-radius: 1px;
+  }
+
+  /* Mobile rank-list tweaks */
+  @media (max-width: 768px) {
+    .rank-row {
+      grid-template-columns: 18px 1fr 70px;
+      grid-template-areas:
+        "pos name val"
+        ".   bar  bar";
+      gap: 8px 10px;
+      padding: 12px 0;
+    }
+    .rank-pos { grid-area: pos; }
+    .rank-name { grid-area: name; }
+    .rank-val { grid-area: val; }
+    .rank-bar { grid-area: bar; margin-top: 2px; }
+    .rank-legend { gap: 10px; font-size: 10px; }
+  }
+
   /* ───── COMMAND STRIP ───── */
   .command-strip {
     margin-top: 28px;
@@ -1216,13 +1371,82 @@
       <!-- BOTTOM ROW -->
       <div class="bottom-row">
 
-        <!-- REVENUE COMPARISON -->
+        <!-- REVENUE COMPARISON — horizontal ranked list -->
         <div class="panel">
           <div class="panel-head">
-            <h4>Revenue by branch · today</h4>
-            <span class="meta">in lakhs (MMK)</span>
+            <h4>Branch leaderboard · today</h4>
+            <span class="meta">vs target · in lakhs MMK</span>
           </div>
-          <canvas id="mainChart" height="120"></canvas>
+          <div class="rank-list">
+
+            <div class="rank-row">
+              <span class="rank-pos mono">1</span>
+              <div class="rank-name">Bahan <span class="rank-sub mono">BR-01</span></div>
+              <div class="rank-bar">
+                <div class="rank-target" style="left:calc(10.8/14*100%)"></div>
+                <div class="rank-fill ok" style="width:calc(12.4/14*100%)"></div>
+              </div>
+              <div class="rank-val mono">12.4<span class="rank-vs up">+15%</span></div>
+            </div>
+
+            <div class="rank-row">
+              <span class="rank-pos mono">2</span>
+              <div class="rank-name">Hlaing <span class="rank-sub mono">BR-02</span></div>
+              <div class="rank-bar">
+                <div class="rank-target" style="left:calc(10.0/14*100%)"></div>
+                <div class="rank-fill near" style="width:calc(9.8/14*100%)"></div>
+              </div>
+              <div class="rank-val mono">9.8<span class="rank-vs near">-2%</span></div>
+            </div>
+
+            <div class="rank-row">
+              <span class="rank-pos mono">3</span>
+              <div class="rank-name">Zeya <span class="rank-sub mono">BR-04 · NPT</span></div>
+              <div class="rank-bar">
+                <div class="rank-target" style="left:calc(7.6/14*100%)"></div>
+                <div class="rank-fill ok" style="width:calc(7.8/14*100%)"></div>
+              </div>
+              <div class="rank-val mono">7.8<span class="rank-vs up">+3%</span></div>
+            </div>
+
+            <div class="rank-row">
+              <span class="rank-pos mono">4</span>
+              <div class="rank-name">Taunggyi <span class="rank-sub mono">BR-06</span></div>
+              <div class="rank-bar">
+                <div class="rank-target" style="left:calc(6.8/14*100%)"></div>
+                <div class="rank-fill under" style="width:calc(5.9/14*100%)"></div>
+              </div>
+              <div class="rank-val mono">5.9<span class="rank-vs down">-13%</span></div>
+            </div>
+
+            <div class="rank-row">
+              <span class="rank-pos mono">5</span>
+              <div class="rank-name">Aungmye <span class="rank-sub mono">BR-03 · MDY</span></div>
+              <div class="rank-bar">
+                <div class="rank-target" style="left:calc(8.5/14*100%)"></div>
+                <div class="rank-fill warn" style="width:calc(4.2/14*100%)"></div>
+              </div>
+              <div class="rank-val mono">4.2<span class="rank-vs down">-51%</span></div>
+            </div>
+
+            <div class="rank-row offline">
+              <span class="rank-pos mono">—</span>
+              <div class="rank-name">Mawlamyine <span class="rank-sub mono">BR-05 · OFFLINE</span></div>
+              <div class="rank-bar">
+                <div class="rank-target" style="left:calc(6.5/14*100%)"></div>
+                <div class="rank-fill crit" style="width:2%"></div>
+              </div>
+              <div class="rank-val mono">—<span class="rank-vs crit">down</span></div>
+            </div>
+
+          </div>
+
+          <div class="rank-legend">
+            <span class="legend-item"><span class="legend-dot ok"></span>Above target</span>
+            <span class="legend-item"><span class="legend-dot near"></span>Near plan</span>
+            <span class="legend-item"><span class="legend-dot under"></span>Behind</span>
+            <span class="legend-item"><span class="legend-line"></span>Target</span>
+          </div>
         </div>
 
         <!-- ACTIVITY FEED -->
@@ -1332,63 +1556,6 @@
   spark('spark2', [180, 240, 380, 520, 720, 920, 1100, 1247], '#4ade80');
   spark('spark3', [7100, 7050, 6950, 6900, 6850, 6820, 6810, 6800], '#f87171');
   spark('spark4', [22.1, 22.8, 23.4, 23.9, 24.3, 24.6, 24.8, 25.0], '#4ade80');
-
-  // Main bar chart
-  const mainCtx = document.getElementById('mainChart');
-  new Chart(mainCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Bahan', 'Hlaing', 'Zeya', 'Taunggyi', 'Aungmye', 'Mawlamyine'],
-      datasets: [{
-        label: 'Today',
-        data: [12.4, 9.8, 7.8, 5.9, 4.2, 0],
-        backgroundColor: ['#f4b860', '#f4b860', '#f4b860', '#5a6470', '#fbbf24', '#ef4444'],
-        borderRadius: 4,
-        barThickness: 24
-      }, {
-        label: 'Target',
-        data: [10.8, 10.0, 7.6, 6.8, 8.5, 6.5],
-        backgroundColor: '#1c232c',
-        borderRadius: 4,
-        barThickness: 24
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'top',
-          align: 'end',
-          labels: {
-            color: '#8b95a1',
-            font: { size: 11, family: 'Geist' },
-            boxWidth: 10, boxHeight: 10,
-            padding: 12
-          }
-        },
-        tooltip: {
-          backgroundColor: '#161b22',
-          borderColor: '#1c232c',
-          borderWidth: 1,
-          titleColor: '#f8f6f1',
-          bodyColor: '#c4cdd6',
-          titleFont: { family: 'Geist', size: 12 },
-          bodyFont: { family: 'Geist Mono', size: 11 }
-        }
-      },
-      scales: {
-        y: {
-          ticks: { color: '#5a6470', font: { family: 'Geist Mono', size: 10 } },
-          grid: { color: 'rgba(248, 246, 241, 0.04)' }
-        },
-        x: {
-          ticks: { color: '#8b95a1', font: { family: 'Geist', size: 11 } },
-          grid: { display: false }
-        }
-      }
-    }
-  });
 </script>
 
 </body>
